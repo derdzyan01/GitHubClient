@@ -1,41 +1,57 @@
 package com.example.projecttask.presentation.viewmodel
 
-import android.app.Application
-import android.content.Context.MODE_PRIVATE
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.MutableLiveData
-import com.example.projecttask.domain.repository.AuthRepository
-import com.example.projecttask.data.repository.AuthRepositoryImpl
+import android.content.Context
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.launch
+import androidx.datastore.preferences.core.edit
+import com.example.projecttask.domain.usecase.LoginUseCase
+import com.example.projecttask.presentation.state.LoginUiState
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.disposables.Disposable
 import io.reactivex.rxjava3.schedulers.Schedulers
-import io.reactivex.rxjava3.disposables.CompositeDisposable
-import androidx.core.content.edit
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import javax.inject.Inject
+import com.example.projecttask.data.authDataStore
+import com.example.projecttask.data.LOGGED_IN
 
-class LoginViewModel(application: Application) : AndroidViewModel(application) {
-    private val authRepository: AuthRepository = AuthRepositoryImpl()
-    val loginResult = MutableLiveData<Boolean>()
-    private val compositeDisposable = CompositeDisposable()
+@HiltViewModel
+class LoginViewModel @Inject constructor(
+    @param:ApplicationContext private val context: Context,
+    private val loginUseCase: LoginUseCase
+) : ViewModel() {
+
+    private val _uiState = MutableStateFlow<LoginUiState>(LoginUiState.Idle)
+    val uiState: StateFlow<LoginUiState> = _uiState.asStateFlow()
+
+    private var disposable: Disposable? = null
 
     fun authenticate(username: String, password: String) {
-        val disposable = authRepository.authenticate(username, password)
+        _uiState.value = LoginUiState.Loading
+        disposable = loginUseCase(username, password)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
-                { _ ->
-                    loginResult.value = true
-                    getApplication<Application>().getSharedPreferences("auth_prefs", MODE_PRIVATE)
-                        .edit {
-                            putBoolean("is_logged_in", true)
+                { user ->
+                    viewModelScope.launch {
+                        context.authDataStore.edit { prefs ->
+                            prefs[LOGGED_IN] = true
                         }
+                        _uiState.value = LoginUiState.Success(user)
+                    }
                 },
-                { _ -> loginResult.value = false }
+                { error ->
+                    _uiState.value = LoginUiState.Error(error.message ?: "Unknown error")
+                }
             )
-
-        compositeDisposable.add(disposable)
     }
 
     override fun onCleared() {
+        disposable?.dispose()
         super.onCleared()
-        compositeDisposable.clear()
     }
 }

@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     id("com.google.devtools.ksp") version "2.2.20-2.0.3"
+    id("com.google.dagger.hilt.android")
 }
 
 android {
@@ -73,4 +74,11 @@ dependencies {
     implementation(libs.rxjava)
     implementation(libs.rxandroid)
     implementation(libs.adapter.rxjava3)
+
+    // Hilt
+    implementation(libs.hilt.android)
+    ksp(libs.hilt.android.compiler)
+
+    // datastore
+    implementation(libs.androidx.datastore.preferences)
 }

@@ -2,15 +2,22 @@ package com.example.projecttask.presentation.view
 
 import android.content.Intent
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import com.example.projecttask.databinding.ActivityLoginBinding
+import com.example.projecttask.presentation.state.LoginUiState
 import com.example.projecttask.presentation.viewmodel.LoginViewModel
 import com.google.android.material.snackbar.Snackbar
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
+import androidx.datastore.preferences.core.edit
+import com.example.projecttask.data.LOGGED_IN
+import com.example.projecttask.data.authDataStore
 
+@AndroidEntryPoint
 class LoginActivity : AppCompatActivity() {
+
     private lateinit var binding: ActivityLoginBinding
     private val viewModel: LoginViewModel by viewModels()
 
@@ -20,31 +27,26 @@ class LoginActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.signInButton.setOnClickListener {
-            val username = binding.usernameEditText.text.toString()
-            val password = binding.passwordEditText.text.toString()
-            if (username.isNotEmpty() && password.isNotEmpty()) {
-                viewModel.authenticate(username, password)
-            }
+            val u = binding.usernameEditText.text.toString()
+            val p = binding.passwordEditText.text.toString()
+            if (u.isNotBlank() && p.isNotBlank()) viewModel.authenticate(u, p)
         }
 
-        viewModel.loginResult.observe(this) { success ->
-            if (success) {
-                startActivity(Intent(this, MainActivity::class.java))
-                finish()
-            } else {
-                Snackbar.make(binding.root, "Invalid credentials", Snackbar.LENGTH_SHORT).show()
-            }
-        }
+        lifecycleScope.launch {
+            viewModel.uiState.collect { state ->
+                binding.signInButton.isEnabled = state !is LoginUiState.Loading
+                when (state) {
+                    is LoginUiState.Success -> {
 
-        val textWatcher = object : TextWatcher {
-            override fun afterTextChanged(s: Editable?) {}
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                binding.signInButton.isEnabled = binding.usernameEditText.text?.isNotEmpty() == true &&
-                        binding.passwordEditText.text?.isNotEmpty() == true
+                        startActivity(Intent(this@LoginActivity, MainActivity::class.java))
+                        finish()
+                    }
+                    is LoginUiState.Error ->
+                        Snackbar.make(binding.root, "Invalid Credentials", Snackbar.LENGTH_LONG).show()
+                    else -> Unit
+                }
             }
         }
-        binding.usernameEditText.addTextChangedListener(textWatcher)
-        binding.passwordEditText.addTextChangedListener(textWatcher)
     }
 }
+

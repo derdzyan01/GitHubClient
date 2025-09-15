@@ -1,8 +1,8 @@
 package com.example.projecttask.domain.repository
 
-import io.reactivex.rxjava3.core.Observable
-import com.example.projecttask.data.model.User
+import io.reactivex.rxjava3.core.Single
+import com.example.projecttask.domain.model.User
 
 interface AuthRepository {
-    fun authenticate(username: String, password: String): Observable<User>
+    fun authenticate(username: String, password: String): Single<User>
 }
