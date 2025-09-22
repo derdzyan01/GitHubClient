@@ -39,8 +39,8 @@
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/passwordEditText"
-            android:layout_height="wrap_content"
             android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:hint="@string/password"
             android:inputType="textPassword"
             android:textSize="16sp" />
@@ -54,6 +54,6 @@
         android:text="@string/sign_in"
         android:textSize="16sp"
         android:textAllCaps="false"
-        android:enabled="false" />
+        android:enabled="true" />
 
 </LinearLayout>

@@ -6,5 +6,5 @@ import com.example.projecttask.domain.model.User
 fun UserDto.toDomain() = User(
     login = login,
     id = id,
-    avatarUrl = avatar_url
+    avatarUrl = avatarUrl
 )

@@ -1,20 +1,24 @@
 package com.example.projecttask.presentation.view
 
-import android.content.Intent
 import android.os.Bundle
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.map
 import androidx.lifecycle.lifecycleScope
-import com.example.projecttask.data.LOGGED_IN
-import com.example.projecttask.data.authDataStore
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.NavHostFragment
+import com.example.projecttask.R
 import com.example.projecttask.databinding.ActivityMainBinding
+import com.example.projecttask.presentation.viewmodel.MainViewModel
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
+    private val viewModel: MainViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         val splash = installSplashScreen()
@@ -24,16 +28,16 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         splash.setKeepOnScreenCondition { true }
-        lifecycleScope.launch {
-            val loggedIn = authDataStore.data
-                .map { it[LOGGED_IN] == true }
-                .first()
 
+        lifecycleScope.launch {
+            val isLoggedIn = viewModel.isLoggedIn().first()
             splash.setKeepOnScreenCondition { false }
 
-            if (!loggedIn) {
-                startActivity(Intent(this@MainActivity, LoginActivity::class.java))
-                finish()
+            val navController = findNavController(R.id.nav_host_fragment)
+            if (isLoggedIn) {
+                navController.navigate(R.id.homeFragment)
+            } else {
+                navController.navigate(R.id.loginFragment)
             }
         }
     }

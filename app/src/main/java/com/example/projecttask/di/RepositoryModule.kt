@@ -9,10 +9,8 @@ import com.example.projecttask.data.repository.AuthRepositoryImpl
 
 @Module
 @InstallIn(SingletonComponent::class)
-abstract class RepositoryModule {
+interface RepositoryModule {
 
     @Binds
-    abstract fun bindAuthRepository(
-        impl: AuthRepositoryImpl
-    ): AuthRepository
+    fun bindAuthRepository(impl: AuthRepositoryImpl): AuthRepository
 }
