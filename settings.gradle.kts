@@ -21,3 +21,7 @@ dependencyResolutionManagement {
 
 rootProject.name = "Project Task"
 include(":app")
+include(":data")
+include(":domain")
+include(":feature_auth")
+include(":feature_home")
