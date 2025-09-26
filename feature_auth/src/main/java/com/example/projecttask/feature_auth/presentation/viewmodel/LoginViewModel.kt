@@ -5,7 +5,6 @@ import androidx.lifecycle.viewModelScope
 import com.example.projecttask.domain.usecase.LoginUseCase
 import com.example.projecttask.domain.usecase.SetLoginStatusUseCase
 import com.example.projecttask.feature_auth.presentation.state.LoginUiEvent
-import com.example.projecttask.feature_auth.presentation.state.LoginUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.disposables.Disposable
@@ -24,16 +23,17 @@ class LoginViewModel @Inject constructor(
     private val setLoginStatusUseCase: SetLoginStatusUseCase
 ) : ViewModel() {
 
-    private val _uiState = MutableStateFlow<LoginUiState>(LoginUiState.Idle)
-    val uiState: StateFlow<LoginUiState> = _uiState.asStateFlow()
 
     private val _uiEvent = MutableSharedFlow<LoginUiEvent>()
     val uiEvent = _uiEvent.asSharedFlow()
 
     private var disposable: Disposable? = null
 
+    private val _isLoading = MutableStateFlow(false)
+    val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
+
     fun authenticate(username: String, password: String) {
-        _uiState.value = LoginUiState.Loading
+        _isLoading.value = true
 
         disposable = loginUseCase(username, password)
             .subscribeOn(Schedulers.io())
@@ -42,17 +42,19 @@ class LoginViewModel @Inject constructor(
                 { user ->
                     viewModelScope.launch {
                         setLoginStatusUseCase(true)
-                        _uiState.value = LoginUiState.Success(user)
+                        _isLoading.value = false
+                        _uiEvent.emit(LoginUiEvent.NavigateToHome)
                     }
                 },
                 { error ->
                     viewModelScope.launch {
                         _uiEvent.emit(LoginUiEvent.ShowError(error.message ?: "Unknown error"))
-                        _uiState.value = LoginUiState.Idle
+                        _isLoading.value = false
                     }
                 }
             )
     }
+
 
     override fun onCleared() {
         disposable?.dispose()

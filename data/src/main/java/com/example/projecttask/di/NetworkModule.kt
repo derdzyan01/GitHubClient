@@ -48,13 +48,4 @@ object NetworkModule {
     @Provides
     @Singleton
     fun provideApplicationContext(@ApplicationContext context: Context): Context = context
-
-    @Provides
-    @Singleton
-    fun provideRetrofitBuilder(): Retrofit.Builder {
-        return Retrofit.Builder()
-            .baseUrl("https://api.github.com/")
-            .addConverterFactory(GsonConverterFactory.create())
-            .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
-    }
 }

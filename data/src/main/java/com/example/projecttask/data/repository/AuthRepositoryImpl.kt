@@ -2,48 +2,39 @@ package com.example.projecttask.data.repository
 
 import io.reactivex.rxjava3.core.Single
 import com.example.projecttask.data.AuthDataStoreManager
-import com.example.projecttask.data.api.AuthInterceptor
 import com.example.projecttask.data.api.GitHubApiService
+import com.example.projecttask.data.dto.UserDto
 import com.example.projecttask.data.mapper.toDomain
 import com.example.projecttask.domain.model.User
 import com.example.projecttask.domain.repository.AuthRepository
 import kotlinx.coroutines.flow.Flow
-import okhttp3.OkHttpClient
-import retrofit2.Retrofit
-import retrofit2.adapter.rxjava3.RxJava3CallAdapterFactory
-import retrofit2.converter.gson.GsonConverterFactory
+import okhttp3.Credentials
+import retrofit2.Response
 import javax.inject.Inject
 
 class AuthRepositoryImpl @Inject constructor(
-    private val okHttpClient: OkHttpClient,
     private val dataStoreManager: AuthDataStoreManager,
-    private val retrofitBuilder: Retrofit.Builder
+    private val gitHubApiService: GitHubApiService
 ) : AuthRepository {
 
     override fun authenticate(username: String, password: String): Single<User> {
-        val authenticatedClient = okHttpClient.newBuilder()
-            .addInterceptor(AuthInterceptor(username, password))
-            .build()
+        val authHeader = Credentials.basic(username, password)
 
-        val authenticatedService = retrofitBuilder
-            .client(authenticatedClient)
-            .build()
-            .create(GitHubApiService::class.java)
-
-        return authenticatedService.getUser()
-            .map { userDto -> userDto.toDomain() }
-            .onErrorResumeNext { error ->
-                Single.error(
-                    when {
-                        error.message?.contains("401") == true ->
-                            Exception("invalid credentials")
-                        error.message?.contains("403") == true ->
-                            Exception("access forbidden")
-                        error.message?.contains("network") == true ->
-                            Exception("network error")
-                        else -> Exception("login failed: ${error.message ?: "Unknown error"}")
-                    }
-                )
+        return gitHubApiService.getUser(authHeader)
+            .flatMap { response: Response<UserDto> ->
+                if (response.isSuccessful) {
+                    val body = response.body()
+                    if (body != null) Single.just(body.toDomain())
+                    else Single.error(Exception("empty response"))
+                } else {
+                    Single.error(
+                        when (response.code()) {
+                            401 -> Exception("invalid credentials")
+                            403 -> Exception("access forbidden")
+                            else -> Exception("login failed: ${response.code()}")
+                        }
+                    )
+                }
             }
     }
 

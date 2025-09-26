@@ -41,10 +41,10 @@ android {
 }
 
 dependencies {
-    implementation(project(":data"))
-    implementation(project(":domain"))
-    implementation(project(":feature_auth"))
-    implementation(project(":feature_home"))
+    implementation(projects.data)
+    implementation(projects.domain)
+    implementation(projects.featureAuth)
+    implementation(projects.featureHome)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)

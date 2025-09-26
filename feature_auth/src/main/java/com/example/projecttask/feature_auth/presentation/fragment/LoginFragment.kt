@@ -11,7 +11,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.projecttask.feature_auth.databinding.FragmentLoginBinding
 import com.example.projecttask.feature_auth.presentation.state.LoginUiEvent
-import com.example.projecttask.feature_auth.presentation.state.LoginUiState
 import com.example.projecttask.feature_auth.presentation.viewmodel.LoginViewModel
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
@@ -56,14 +55,9 @@ class LoginFragment : Fragment() {
 
     private fun observeUiState() {
         lifecycleScope.launch {
-            viewModel.uiState.collect { state ->
-                binding.signInButton.isEnabled = state !is LoginUiState.Loading
-
-                if (state is LoginUiState.Success) {
-                    findNavController().navigate(
-                        "app://home".toUri(),
-                    )
-                }
+            viewModel.isLoading.collect { loading ->
+                // uistate loading-y vor petq chi, uiState.kt jnjel em.
+                binding.signInButton.isEnabled = !loading
             }
         }
     }
@@ -74,6 +68,9 @@ class LoginFragment : Fragment() {
                 when (event) {
                     is LoginUiEvent.ShowError -> {
                         Snackbar.make(binding.root, event.message, Snackbar.LENGTH_LONG).show()
+                    }
+                    is LoginUiEvent.NavigateToHome -> {
+                        findNavController().navigate("app://home".toUri())
                     }
                 }
             }
