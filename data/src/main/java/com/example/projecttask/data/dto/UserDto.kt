@@ -2,7 +2,7 @@ package com.example.projecttask.data.dto
 
 import com.google.gson.annotations.SerializedName
 
-data class UserDto(
+internal data class UserDto(
     @SerializedName("login")
     val login: String,
     @SerializedName("id")

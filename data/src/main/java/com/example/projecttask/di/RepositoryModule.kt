@@ -9,7 +9,7 @@ import com.example.projecttask.data.repository.AuthRepositoryImpl
 
 @Module
 @InstallIn(SingletonComponent::class)
-interface RepositoryModule {
+internal interface RepositoryModule {
 
     @Binds
     fun bindAuthRepository(impl: AuthRepositoryImpl): AuthRepository

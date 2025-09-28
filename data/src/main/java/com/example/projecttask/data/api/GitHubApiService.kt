@@ -6,7 +6,7 @@ import retrofit2.http.GET
 import retrofit2.http.Header
 import com.example.projecttask.data.dto.UserDto
 
-interface GitHubApiService {
+internal interface GitHubApiService {
     @GET("user")
     fun getUser(@Header("Authorization") auth: String): Single<Response<UserDto>>
 }

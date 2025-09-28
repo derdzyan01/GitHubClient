@@ -15,7 +15,7 @@ import kotlin.text.set
 val Context.authDataStore: DataStore<Preferences> by preferencesDataStore(name = "auth")
 
 @Singleton
-class AuthDataStoreManager @Inject constructor(
+internal class AuthDataStoreManager @Inject constructor(
     private val context: Context
 ) {
     private val LOGGED_IN = booleanPreferencesKey("is_logged_in")

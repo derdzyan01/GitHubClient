@@ -4,11 +4,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.example.projecttask.feature_auth.R
 import com.example.projecttask.feature_auth.databinding.FragmentLoginBinding
 import com.example.projecttask.feature_auth.presentation.state.LoginUiEvent
 import com.example.projecttask.feature_auth.presentation.viewmodel.LoginViewModel
@@ -70,7 +70,7 @@ class LoginFragment : Fragment() {
                         Snackbar.make(binding.root, event.message, Snackbar.LENGTH_LONG).show()
                     }
                     is LoginUiEvent.NavigateToHome -> {
-                        findNavController().navigate("app://home".toUri())
+                        findNavController().navigate(R.id.action_login_to_home)
                     }
                 }
             }

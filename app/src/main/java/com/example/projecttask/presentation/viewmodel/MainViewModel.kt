@@ -10,13 +10,13 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-sealed interface NavigationEvent {
+internal sealed interface NavigationEvent {
     object ToLoginScreen : NavigationEvent
     object ToHomeScreen : NavigationEvent
 }
 
 @HiltViewModel
-class MainViewModel @Inject constructor(
+internal class MainViewModel @Inject constructor(
     private val getLoginStatusUseCase: GetLoginStatusUseCase
 ) : ViewModel() {
 

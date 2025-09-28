@@ -12,7 +12,7 @@ import okhttp3.Credentials
 import retrofit2.Response
 import javax.inject.Inject
 
-class AuthRepositoryImpl @Inject constructor(
+internal class AuthRepositoryImpl @Inject constructor(
     private val dataStoreManager: AuthDataStoreManager,
     private val gitHubApiService: GitHubApiService
 ) : AuthRepository {

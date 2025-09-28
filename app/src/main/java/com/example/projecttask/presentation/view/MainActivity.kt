@@ -39,7 +39,7 @@ class MainActivity : AppCompatActivity() {
                 navGraph.setStartDestination(
                     when (event) {
                         is NavigationEvent.ToHomeScreen -> R.id.homeFragment
-                        is NavigationEvent.ToLoginScreen -> R.id.loginFragment
+                        is NavigationEvent.ToLoginScreen -> com.example.projecttask.feature_auth.R.id.nav_graph_auth
                     }
                 )
                 navController.graph = navGraph
