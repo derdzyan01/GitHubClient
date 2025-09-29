@@ -56,7 +56,6 @@ class LoginFragment : Fragment() {
     private fun observeUiState() {
         lifecycleScope.launch {
             viewModel.isLoading.collect { loading ->
-                // uistate loading-y vor petq chi, uiState.kt jnjel em.
                 binding.signInButton.isEnabled = !loading
             }
         }
