@@ -2,4 +2,14 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="green">#4CAF50</color>
+
+    <color name="colorPrimary">@color/green</color>
+    <color name="colorOnPrimary">@color/white</color>
+
+    <color name="colorBackgroundLight">@color/white</color>
+    <color name="colorOnBackgroundLight">@color/black</color>
+
+    <color name="colorBackgroundDark">@color/black</color>
+    <color name="colorOnBackgroundDark">@color/white</color>
 </resources>
