@@ -4,7 +4,10 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.core.view.WindowCompat
+import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.example.projecttask.R
@@ -22,6 +25,9 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        WindowCompat.setDecorFitsSystemWindows(window, false)
+
         val splash = installSplashScreen()
 
         var keepSplashOnScreen = true
@@ -47,11 +53,28 @@ class MainActivity : AppCompatActivity() {
 
                 binding.bottomNav.setupWithNavController(navController)
 
+                setupBottomNavVisibility(navController)
+
                 keepSplashOnScreen = false
             }
         }
 
 
         viewModel.decideInitialScreen()
+    }
+
+    private fun setupBottomNavVisibility(navController: NavController) {
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            when (destination.id) {
+                com.example.projecttask.feature_home.R.id.homeFragment,
+                com.example.projecttask.feature_home.R.id.usersFragment,
+                com.example.projecttask.feature_home.R.id.profileFragment -> {
+                    binding.bottomNav.isVisible = true
+                }
+                else -> {
+                    binding.bottomNav.isVisible = false
+                }
+            }
+        }
     }
 }

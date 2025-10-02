@@ -2,8 +2,8 @@
     <style name="Base.Theme.ProjectTask" parent="Theme.Material3.Dark.NoActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorOnPrimary">@color/colorOnPrimary</item>
-        <item name="android:colorBackground">@color/colorBackgroundDark</item>
-        <item name="colorOnBackground">@color/colorOnBackgroundDark</item>
+        <item name="android:colorBackground">@color/colorBackgroundLight</item>
+        <item name="colorOnBackground">@color/colorOnBackgroundLight</item>
     </style>
 
     <style name="BottomNavStyle">
