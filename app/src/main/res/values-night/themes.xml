@@ -7,6 +7,12 @@
         <item name="colorOnBackground">@color/colorOnBackgroundDark</item>
     </style>
 
+    <style name="BottomNavStyle">
+        <item name="itemIconTint">@color/bottom_nav_tint</item>
+        <item name="itemTextColor">@color/bottom_nav_tint</item>
+        <item name="itemBackground">@color/bottom_nav_bg</item>
+    </style>
+
     <style name="Theme.ProjectTask.Splash" parent="Theme.SplashScreen">
         <item name="windowSplashScreenBackground">@color/black</item>
         <item name="windowSplashScreenAnimatedIcon">@drawable/ic_launcher_foreground</item>

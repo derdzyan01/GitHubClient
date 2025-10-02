@@ -11,4 +11,14 @@
         android:label="Home"
         tools:layout="@layout/fragment_home" />
 
+    <fragment
+        android:id="@+id/usersFragment"
+        android:name="com.example.projecttask.feature_home.presentation.fragment.UsersFragment"
+        android:label="Users"/>
+
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.example.projecttask.feature_home.presentation.fragment.ProfileFragment"
+        android:label="Profile"/>
+
 </navigation>

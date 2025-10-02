@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.setupWithNavController
 import com.example.projecttask.R
 import com.example.projecttask.databinding.ActivityMainBinding
 import com.example.projecttask.presentation.viewmodel.MainViewModel
@@ -44,9 +45,12 @@ class MainActivity : AppCompatActivity() {
                 )
                 navController.graph = navGraph
 
+                binding.bottomNav.setupWithNavController(navController)
+
                 keepSplashOnScreen = false
             }
         }
+
 
         viewModel.decideInitialScreen()
     }
