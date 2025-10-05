@@ -1,4 +1,4 @@
-package com.example.projecttask.feature_home.presentation.viewmodel
+package com.example.projecttask.feature_main.presentation.home.viewmodel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -15,18 +15,16 @@ import javax.inject.Inject
 class HomeViewModel @Inject constructor(
     private val getReposUseCase: GetReposUseCase
 ) : ViewModel() {
-
     private val _repos = MutableLiveData<List<Repo>>(emptyList())
     val repos: LiveData<List<Repo>> = _repos
 
-    private val _isLoading = MutableLiveData<Boolean>()
+    private val _isLoading = MutableLiveData<Boolean>(false)
     val isLoading: LiveData<Boolean> = _isLoading
 
     private val _error = MutableLiveData<String>()
     val error: LiveData<String> = _error
 
     private val compositeDisposable = CompositeDisposable()
-
     private var currentPage = 1
     private var isLastPage = false
     private var isCurrentlyLoading = false
@@ -38,6 +36,10 @@ class HomeViewModel @Inject constructor(
     fun loadMoreRepos() {
         if (isCurrentlyLoading || isLastPage) return
         loadRepos(isInitialLoad = false)
+    }
+
+    fun refreshRepos() {
+        loadRepos(isInitialLoad = true)
     }
 
     private fun loadRepos(isInitialLoad: Boolean) {
@@ -61,7 +63,11 @@ class HomeViewModel @Inject constructor(
                     isLastPage = true
                 } else {
                     val currentList = _repos.value ?: emptyList()
-                    _repos.value = currentList + newRepos
+                    _repos.value = if (isInitialLoad) {
+                        newRepos
+                    } else {
+                        currentList + newRepos
+                    }
                     currentPage++
                 }
             }, { throwable ->

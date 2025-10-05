@@ -1,4 +1,4 @@
-package com.example.projecttask.feature_home.presentation.fragment
+package com.example.projecttask.feature_main.presentation.home
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,8 +10,8 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.projecttask.feature_home.databinding.FragmentHomeBinding
-import com.example.projecttask.feature_home.presentation.adapter.RepoAdapter
-import com.example.projecttask.feature_home.presentation.viewmodel.HomeViewModel
+import com.example.projecttask.feature_main.presentation.home.adapter.RepoAdapter
+import com.example.projecttask.feature_main.presentation.home.viewmodel.HomeViewModel
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -22,7 +22,7 @@ class HomeFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val viewModel: HomeViewModel by viewModels()
-    private lateinit var repoAdapter: RepoAdapter
+    private val repoAdapter: RepoAdapter by lazy { RepoAdapter() }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -35,11 +35,11 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupRecyclerView()
+        setupSwipeRefresh()
         observeViewModel()
     }
 
     private fun setupRecyclerView() {
-        repoAdapter = RepoAdapter()
         binding.reposRecyclerView.apply {
             adapter = repoAdapter
             layoutManager = LinearLayoutManager(context)
@@ -51,11 +51,18 @@ class HomeFragment : Fragment() {
                     val totalItemCount = layoutManager.itemCount
                     val firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition()
 
-                    if (visibleItemCount + firstVisibleItemPosition >= totalItemCount && firstVisibleItemPosition >= 0) {
+                    if (visibleItemCount + firstVisibleItemPosition >= totalItemCount &&
+                        firstVisibleItemPosition >= 0) {
                         viewModel.loadMoreRepos()
                     }
                 }
             })
+        }
+    }
+
+    private fun setupSwipeRefresh() {
+        binding.swipeRefreshLayout.setOnRefreshListener {
+            viewModel.refreshRepos()
         }
     }
 
@@ -66,6 +73,7 @@ class HomeFragment : Fragment() {
 
         viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
             binding.progressBar.isVisible = isLoading && repoAdapter.currentList.isEmpty()
+            binding.swipeRefreshLayout.isRefreshing = isLoading && repoAdapter.currentList.isNotEmpty()
         }
 
         viewModel.error.observe(viewLifecycleOwner) { errorMsg ->

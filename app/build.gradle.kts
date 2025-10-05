@@ -44,7 +44,7 @@ dependencies {
     implementation(projects.data)
     implementation(projects.domain)
     implementation(projects.featureAuth)
-    implementation(projects.featureHome)
+    implementation(projects.featureMain)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)

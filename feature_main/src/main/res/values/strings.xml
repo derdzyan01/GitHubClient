@@ -4,4 +4,6 @@
     <string name="home">Home</string>
     <string name="users">Users</string>
     <string name="profile">Profile</string>
+    <string name="no_description">no description</string>
+    <string name="no_language">no language</string>
 </resources>

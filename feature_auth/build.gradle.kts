@@ -30,7 +30,7 @@ android {
 
 dependencies {
     implementation(projects.domain)
-    implementation(projects.featureHome)
+    implementation(projects.featureMain)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)

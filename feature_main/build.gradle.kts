@@ -38,6 +38,7 @@ dependencies {
     implementation(libs.androidx.navigation.fragment)
 
     implementation(libs.hilt.android)
+    implementation(libs.androidx.swiperefreshlayout)
     ksp(libs.hilt.android.compiler)
 
     implementation(libs.rxandroid)

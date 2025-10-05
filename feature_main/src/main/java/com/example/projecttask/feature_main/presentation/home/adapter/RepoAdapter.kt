@@ -1,30 +1,32 @@
-package com.example.projecttask.feature_home.presentation.adapter
+package com.example.projecttask.feature_main.presentation.home.adapter
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.projecttask.domain.model.Repo
+import com.example.projecttask.feature_home.R
 import com.example.projecttask.feature_home.databinding.ItemRepoBinding
 
 class RepoAdapter : ListAdapter<Repo, RepoAdapter.RepoViewHolder>(RepoDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RepoViewHolder {
         val binding = ItemRepoBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return RepoViewHolder(binding)
+        return RepoViewHolder(binding, parent.context)
     }
 
     override fun onBindViewHolder(holder: RepoViewHolder, position: Int) {
         holder.bind(getItem(position))
     }
 
-    inner class RepoViewHolder(private val binding: ItemRepoBinding) : RecyclerView.ViewHolder(binding.root) {
+    class RepoViewHolder(private val binding: ItemRepoBinding, private val context: Context) : RecyclerView.ViewHolder(binding.root) {
         fun bind(repo: Repo) {
             binding.repoName.text = repo.name
-            binding.repoDescription.text = repo.description ?: "No description available."
+            binding.repoDescription.text = repo.description ?: context.getString(R.string.no_description)
             binding.repoStars.text = repo.stars.toString()
-            binding.repoLanguage.text = repo.language ?: "No language."
+            binding.repoLanguage.text = repo.language ?: context.getString(R.string.no_language)
         }
     }
 
