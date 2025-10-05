@@ -1,6 +1,7 @@
 package com.example.projecttask.di
 
 import android.content.Context
+import com.example.projecttask.data.api.AuthInterceptor
 import com.example.projecttask.data.api.GitHubApiService
 import dagger.Module
 import dagger.Provides
@@ -20,12 +21,17 @@ internal object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideOkHttpClient(): OkHttpClient {
+    fun provideAuthInterceptor(): AuthInterceptor = AuthInterceptor()
+
+    @Provides
+    @Singleton
+    fun provideOkHttpClient(authInterceptor: AuthInterceptor): OkHttpClient {
         val loggingInterceptor = HttpLoggingInterceptor().apply {
             level = HttpLoggingInterceptor.Level.BODY
         }
 
         return OkHttpClient.Builder()
+            .addInterceptor(authInterceptor)
             .addInterceptor(loggingInterceptor)
             .build()
     }

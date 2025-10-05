@@ -2,6 +2,7 @@ package com.example.projecttask.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.projecttask.data.AuthInterceptorManager
 import com.example.projecttask.domain.usecase.GetLoginStatusUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -17,7 +18,8 @@ internal sealed interface NavigationEvent {
 
 @HiltViewModel
 internal class MainViewModel @Inject constructor(
-    private val getLoginStatusUseCase: GetLoginStatusUseCase
+    private val getLoginStatusUseCase: GetLoginStatusUseCase,
+    private val authInterceptorManager: AuthInterceptorManager
 ) : ViewModel() {
 
     private val _navigationEvent = MutableSharedFlow<NavigationEvent>()
@@ -25,6 +27,8 @@ internal class MainViewModel @Inject constructor(
 
     fun decideInitialScreen() {
         viewModelScope.launch {
+            authInterceptorManager.initialize()
+
             val isLoggedIn = getLoginStatusUseCase().first()
             if (isLoggedIn) {
                 _navigationEvent.emit(NavigationEvent.ToHomeScreen)
