@@ -69,7 +69,7 @@ class LoginFragment : Fragment() {
                         Snackbar.make(binding.root, event.message, Snackbar.LENGTH_LONG).show()
                     }
                     is LoginUiEvent.NavigateToHome -> {
-                        findNavController().navigate(R.id.action_login_to_home)
+                        findNavController().navigate(R.id.action_login_to_main)
                     }
                 }
             }

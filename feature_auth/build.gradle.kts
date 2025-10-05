@@ -44,5 +44,5 @@ dependencies {
     implementation(libs.hilt.android)
     ksp(libs.hilt.android.compiler)
 
-    implementation("androidx.fragment:fragment-ktx:1.8.9")
+    implementation(libs.androidx.fragment.ktx)
 }

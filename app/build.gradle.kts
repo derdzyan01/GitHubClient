@@ -50,7 +50,7 @@ dependencies {
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.activity)
     implementation(libs.androidx.navigation.fragment)
-    implementation("androidx.navigation:navigation-ui-ktx:2.9.5")
+    implementation(libs.androidx.navigation.ui.ktx)
     implementation(libs.androidx.constraintlayout)
     implementation(libs.androidx.core.splashscreen)
 

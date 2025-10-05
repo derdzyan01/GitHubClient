@@ -42,6 +42,6 @@ dependencies {
 
     implementation(libs.rxandroid)
 
-    implementation("androidx.fragment:fragment-ktx:1.8.9")
+    implementation(libs.androidx.fragment.ktx)
 
 }
