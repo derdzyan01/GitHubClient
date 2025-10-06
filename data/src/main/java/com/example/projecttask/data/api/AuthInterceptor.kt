@@ -1,27 +1,24 @@
 package com.example.projecttask.data.api
 
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
+import com.example.projecttask.data.AuthDataStoreManager
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.runBlocking
 import okhttp3.Credentials
 import okhttp3.Interceptor
 import okhttp3.Response
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class AuthInterceptor : Interceptor {
-    private val _credentials = MutableStateFlow<Pair<String, String>?>(null)
-    val credentials: StateFlow<Pair<String, String>?> = _credentials
-
-    fun updateCredentials(username: String, password: String) {
-        _credentials.value = Pair(username, password)
-    }
-
-    fun clearCredentials() {
-        _credentials.value = null
-    }
+@Singleton
+class AuthInterceptor @Inject constructor(
+    private val authDataStoreManager: AuthDataStoreManager
+) : Interceptor {
 
     override fun intercept(chain: Interceptor.Chain): Response {
-        val currentCredentials = _credentials.value
-        return if (currentCredentials != null) {
-            val (username, password) = currentCredentials
+        val credentials = getCurrentCredentials()
+
+        return if (credentials != null) {
+            val (username, password) = credentials
             val credential = Credentials.basic(username, password)
             val request = chain.request().newBuilder()
                 .header("Authorization", credential)
@@ -29,6 +26,18 @@ class AuthInterceptor : Interceptor {
             chain.proceed(request)
         } else {
             chain.proceed(chain.request())
+        }
+    }
+
+    private fun getCurrentCredentials(): Pair<String, String>? {
+        return runBlocking {
+            authDataStoreManager.getCredentials().first().let { (username, password) ->
+                if (!username.isNullOrEmpty() && !password.isNullOrEmpty()) {
+                    Pair(username, password)
+                } else {
+                    null
+                }
+            }
         }
     }
 }

@@ -8,7 +8,7 @@ plugins {
 }
 
 android {
-    namespace = "com.example.projecttask.feature_home"
+    namespace = "com.example.projecttask.feature_main"
     compileSdk = 36
 
     defaultConfig {
@@ -36,6 +36,7 @@ dependencies {
     implementation(libs.material)
     implementation(libs.androidx.constraintlayout)
     implementation(libs.androidx.navigation.fragment)
+    implementation(libs.androidx.navigation.ui.ktx)
 
     implementation(libs.hilt.android)
     implementation(libs.androidx.swiperefreshlayout)

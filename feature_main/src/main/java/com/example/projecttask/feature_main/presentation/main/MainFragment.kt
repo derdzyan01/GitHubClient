@@ -1,4 +1,4 @@
-package com.example.projecttask.presentation.view
+package com.example.projecttask.feature_main.presentation.main
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,8 +9,8 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
-import com.example.projecttask.R
-import com.example.projecttask.databinding.FragmentMainBinding
+import com.example.projecttask.feature_main.R
+import com.example.projecttask.feature_main.databinding.FragmentMainBinding
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -34,13 +34,6 @@ class MainFragment : Fragment() {
         val navController = navHostFragment.navController
 
         binding.bottomNav.setupWithNavController(navController)
-        setupBottomNavVisibility(navController)
-    }
-
-    private fun setupBottomNavVisibility(navController: NavController) {
-        navController.addOnDestinationChangedListener { _, destination, _ ->
-            binding.bottomNav.isVisible = true
-        }
     }
 
     override fun onDestroyView() {

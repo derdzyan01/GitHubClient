@@ -18,11 +18,6 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 internal object NetworkModule {
-
-    @Provides
-    @Singleton
-    fun provideAuthInterceptor(): AuthInterceptor = AuthInterceptor()
-
     @Provides
     @Singleton
     fun provideOkHttpClient(authInterceptor: AuthInterceptor): OkHttpClient {

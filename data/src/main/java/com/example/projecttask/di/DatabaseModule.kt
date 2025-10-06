@@ -26,6 +26,7 @@ internal object DatabaseModule {
     }
 
     @Provides
+    @Singleton
     fun provideRepoDao(database: AppDatabase): RepoDao {
         return database.repoDao()
     }

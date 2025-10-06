@@ -17,12 +17,9 @@ import javax.inject.Inject
 internal class AuthRepositoryImpl @Inject constructor(
     private val dataStoreManager: AuthDataStoreManager,
     private val gitHubApiService: GitHubApiService,
-    private val authInterceptor: AuthInterceptor
 ) : AuthRepository {
 
     override fun authenticate(username: String, password: String): Single<User> {
-            authInterceptor.updateCredentials(username, password)
-
         return gitHubApiService.getUser()
             .flatMap { response: Response<UserDto> ->
                 if (response.isSuccessful) {
@@ -33,11 +30,9 @@ internal class AuthRepositoryImpl @Inject constructor(
                         }
                         saveCredentialsCompletable.toSingleDefault(body.toDomain())
                     } else {
-                        authInterceptor.clearCredentials()
                         Single.error(Exception("empty response"))
                     }
                 } else {
-                    authInterceptor.clearCredentials()
                     Single.error(
                         when (response.code()) {
                             401 -> Exception("invalid credentials")
@@ -47,16 +42,10 @@ internal class AuthRepositoryImpl @Inject constructor(
                     )
                 }
             }
-            .doOnError {
-                authInterceptor.clearCredentials()
-            }
     }
 
     override suspend fun setLoggedIn(isLoggedIn: Boolean) {
         dataStoreManager.setLoggedIn(isLoggedIn)
-        if (!isLoggedIn) {
-            authInterceptor.clearCredentials()
-        }
     }
 
     override fun isLoggedIn(): Flow<Boolean> = dataStoreManager.isLoggedIn()

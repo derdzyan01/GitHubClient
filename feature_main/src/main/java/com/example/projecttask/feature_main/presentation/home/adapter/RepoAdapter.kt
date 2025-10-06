@@ -7,8 +7,8 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.projecttask.domain.model.Repo
-import com.example.projecttask.feature_home.R
-import com.example.projecttask.feature_home.databinding.ItemRepoBinding
+import com.example.projecttask.feature_main.R
+import com.example.projecttask.feature_main.databinding.ItemRepoBinding
 
 class RepoAdapter : ListAdapter<Repo, RepoAdapter.RepoViewHolder>(RepoDiffCallback()) {
 

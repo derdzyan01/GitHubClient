@@ -9,7 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.projecttask.feature_home.databinding.FragmentHomeBinding
+import com.example.projecttask.feature_main.databinding.FragmentHomeBinding
 import com.example.projecttask.feature_main.presentation.home.adapter.RepoAdapter
 import com.example.projecttask.feature_main.presentation.home.viewmodel.HomeViewModel
 import com.google.android.material.snackbar.Snackbar

@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.example.projecttask.feature_home.R
+import com.example.projecttask.feature_main.R
 
 class UsersFragment : Fragment() {
     override fun onCreateView(
