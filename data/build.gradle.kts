@@ -40,6 +40,9 @@ dependencies {
 
     implementation(libs.androidx.datastore.preferences)
 
+    implementation(libs.androidx.room.rxjava3)
+    implementation(libs.kotlinx.coroutines.rx3)
+
     implementation(libs.androidx.room.runtime)
     ksp(libs.androidx.room.compiler)
 

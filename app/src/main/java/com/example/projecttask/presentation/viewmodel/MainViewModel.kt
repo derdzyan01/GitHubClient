@@ -17,7 +17,7 @@ internal sealed interface NavigationEvent {
 
 @HiltViewModel
 internal class MainViewModel @Inject constructor(
-    private val getLoginStatusUseCase: GetLoginStatusUseCase
+    private val getLoginStatusUseCase: GetLoginStatusUseCase,
 ) : ViewModel() {
 
     private val _navigationEvent = MutableSharedFlow<NavigationEvent>()

@@ -26,6 +26,6 @@ android {
 dependencies {
     implementation(libs.rxjava)
 
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2")
-    implementation("javax.inject:javax.inject:1")
+    implementation(libs.kotlinx.coroutines.core)
+    implementation(libs.javax.inject)
 }

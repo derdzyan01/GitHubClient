@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="welcome_to_main_screen">Welcome to Main Screen</string>
+    <string name="home">Home</string>
+    <string name="users">Users</string>
+    <string name="profile">Profile</string>
+    <string name="no_description">no description</string>
+    <string name="no_language">no language</string>
+</resources>

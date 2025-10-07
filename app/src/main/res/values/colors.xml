@@ -12,4 +12,6 @@
 
     <color name="colorBackgroundDark">@color/black</color>
     <color name="colorOnBackgroundDark">@color/white</color>
+
+    <color name="bottom_nav_bg">#FFFFFF</color>
 </resources>

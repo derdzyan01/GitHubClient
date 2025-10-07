@@ -5,20 +5,32 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
-import androidx.datastore.preferences.preferencesDataStore
+import androidx.datastore.preferences.core.stringPreferencesKey
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 import javax.inject.Singleton
-import kotlin.text.set
-
-val Context.authDataStore: DataStore<Preferences> by preferencesDataStore(name = "auth")
 
 @Singleton
-internal class AuthDataStoreManager @Inject constructor(
+class AuthDataStoreManager @Inject constructor(
     private val context: Context
 ) {
-    private val LOGGED_IN = booleanPreferencesKey("is_logged_in")
+    companion object {
+        private val USERNAME_KEY = stringPreferencesKey("username")
+        private val PASSWORD_KEY = stringPreferencesKey("password")
+        private val LOGGED_IN = booleanPreferencesKey("is_logged_in")
+    }
+
+    suspend fun saveCredentials(username: String, password: String) {
+        context.authDataStore.edit { prefs ->
+            prefs[USERNAME_KEY] = username
+            prefs[PASSWORD_KEY] = password
+        }
+    }
+
+    fun getCredentials(): Flow<Pair<String?, String?>> = context.authDataStore.data.map { prefs ->
+        Pair(prefs[USERNAME_KEY], prefs[PASSWORD_KEY])
+    }
 
     suspend fun setLoggedIn(isLoggedIn: Boolean) {
         context.authDataStore.edit { prefs ->

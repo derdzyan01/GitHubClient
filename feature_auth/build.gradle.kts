@@ -30,7 +30,7 @@ android {
 
 dependencies {
     implementation(projects.domain)
-    implementation(projects.featureHome)
+    implementation(projects.featureMain)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
@@ -44,5 +44,5 @@ dependencies {
     implementation(libs.hilt.android)
     ksp(libs.hilt.android.compiler)
 
-    implementation("androidx.fragment:fragment-ktx:1.8.9")
+    implementation(libs.androidx.fragment.ktx)
 }
