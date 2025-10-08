@@ -3,6 +3,6 @@
     <style name="BottomNavStyle">
         <item name="itemIconTint">@color/bottom_nav_tint</item>
         <item name="itemTextColor">@color/bottom_nav_tint</item>
-        <item name="itemBackground">@color/bottom_nav_bg</item>
+        <item name="itemBackground">@color/bottom_nav_bg_light</item>
     </style>
 </resources>

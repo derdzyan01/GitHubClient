@@ -2,8 +2,10 @@ package com.example.projecttask.di
 
 import com.example.projecttask.data.repository.AuthRepositoryImpl
 import com.example.projecttask.data.repository.RepoRepositoryImpl
+import com.example.projecttask.data.repository.UserRepositoryImpl
 import com.example.projecttask.domain.repository.AuthRepository
 import com.example.projecttask.domain.repository.RepoRepository
+import com.example.projecttask.domain.repository.UserRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -18,4 +20,7 @@ internal interface RepositoryModule {
 
     @Binds
     fun bindRepoRepository(impl: RepoRepositoryImpl): RepoRepository
+
+    @Binds
+    fun bindUserRepository(impl: UserRepositoryImpl): UserRepository
 }
