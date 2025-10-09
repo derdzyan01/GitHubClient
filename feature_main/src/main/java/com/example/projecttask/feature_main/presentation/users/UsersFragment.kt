@@ -26,7 +26,11 @@ class UsersFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val viewModel: UsersViewModel by viewModels()
-    private lateinit var userAdapter: UserAdapter
+    private val userAdapter: UserAdapter by lazy {
+        UserAdapter { user ->
+            // navigation to the details page
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -38,9 +42,6 @@ class UsersFragment : Fragment() {
 
 
     private fun setupRecyclerView() {
-        userAdapter = UserAdapter { user ->
-            // here it will navigate to the details page
-        }
         binding.usersRecyclerView.apply {
             adapter = userAdapter
             layoutManager = LinearLayoutManager(context)
@@ -52,13 +53,16 @@ class UsersFragment : Fragment() {
                     val totalItemCount = layoutManager.itemCount
                     val firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition()
 
-                    if (visibleItemCount + firstVisibleItemPosition >= totalItemCount && firstVisibleItemPosition >= 0) {
+                    if (visibleItemCount + firstVisibleItemPosition >= totalItemCount &&
+                        firstVisibleItemPosition >= 0
+                    ) {
                         viewModel.loadMoreUsers()
                     }
                 }
             })
         }
     }
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

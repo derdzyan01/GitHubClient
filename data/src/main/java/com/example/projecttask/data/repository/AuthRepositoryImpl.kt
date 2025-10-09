@@ -23,18 +23,16 @@ internal class AuthRepositoryImpl @Inject constructor(
     override fun authenticate(username: String, password: String): Single<User> {
         val authToken = Credentials.basic(username, password)
 
-        return gitHubApiService.getUser(authToken)
-            .flatMap { response: Response<UserDto> ->
+        val saveCredentialsCompletable = rxCompletable(Dispatchers.IO) {
+            dataStoreManager.saveCredentials(username, password)
+        }
+
+        return saveCredentialsCompletable
+            .andThen(gitHubApiService.getUser())
+            .flatMap { response ->
                 if (response.isSuccessful) {
-                    val body = response.body()
-                    if (body != null) {
-                        val saveCredentialsCompletable = rxCompletable(Dispatchers.IO) {
-                            dataStoreManager.saveCredentials(username, password)
-                        }
-                        saveCredentialsCompletable.toSingleDefault(body.toDomain())
-                    } else {
-                        Single.error(Exception("empty response"))
-                    }
+                    response.body()?.let { Single.just(it.toDomain()) }
+                        ?: Single.error(Exception("empty response"))
                 } else {
                     Single.error(
                         when (response.code()) {

@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.projecttask.domain.model.User
 import com.example.projecttask.domain.usecase.GetUsersUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -12,6 +13,10 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onCompletion
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -34,7 +39,6 @@ class UsersViewModel @Inject constructor(
 
     private var currentSince = 0
     private var isLastPage = false
-    private var isCurrentlyLoading = false
 
 
     init {
@@ -44,7 +48,7 @@ class UsersViewModel @Inject constructor(
     }
 
     fun loadMoreUsers() {
-        if (isCurrentlyLoading || isLastPage) {
+        if (_isLoading.value || isLastPage) {
             return
         }
         loadUsers(
@@ -66,15 +70,12 @@ class UsersViewModel @Inject constructor(
             _users.value = emptyList()
         }
 
-        viewModelScope.launch {
-            getUsersUseCase(
-                since = currentSince
-            ).onStart {
-                isCurrentlyLoading = true
+        getUsersUseCase(since = currentSince)
+            .flowOn(Dispatchers.IO)
+            .onStart {
                 _isLoading.value = true
-            }.catch { exception ->
-                _error.emit(exception.message ?: "an unknown error")
-            }.collect { newUsers ->
+            }
+            .onEach { newUsers ->
                 if (newUsers.isEmpty()) {
                     isLastPage = true
                 } else {
@@ -82,8 +83,14 @@ class UsersViewModel @Inject constructor(
                     currentSince = newUsers.last().id
                 }
             }
-            isCurrentlyLoading = false
-            _isLoading.value = false
-        }
+            .catch { exception ->
+                _error.emit(exception.message ?: "an unknown error")
+            }
+            .onCompletion {
+                _isLoading.value = false
+            }
+            .flowOn(Dispatchers.Main.immediate)
+            .launchIn(viewModelScope)
+
     }
 }

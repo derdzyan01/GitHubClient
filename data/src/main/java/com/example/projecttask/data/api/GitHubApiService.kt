@@ -10,7 +10,7 @@ import retrofit2.http.Query
 
 internal interface GitHubApiService {
     @GET("user")
-    fun getUser(@Header("Authorization") authorization: String): Single<Response<UserDto>>
+    fun getUser(): Single<Response<UserDto>>
 
     @GET("user/repos")
     fun getRepos(
