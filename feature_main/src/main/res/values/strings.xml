@@ -6,4 +6,5 @@
     <string name="profile">Profile</string>
     <string name="no_description">no description</string>
     <string name="no_language">no language</string>
+    <string name="user_avatar">user avatar</string>
 </resources>

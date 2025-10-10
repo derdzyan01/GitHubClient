@@ -1,4 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="bottom_nav_bg">#FFFFFF</color>
+    <color name="md_theme_primary">#2E7D32</color>
+    <color name="md_theme_onPrimary">#FFFFFF</color>
+    <color name="md_theme_background">#F7F9F7</color>
+    <color name="md_theme_onBackground">#1A1C1A</color>
+    <color name="md_theme_surface">#F7F9F7</color>
+    <color name="md_theme_onSurface">#1A1C1A</color>
+    <color name="md_theme_on_surface_variant">#73796F</color>
+
+    <color name="bottom_nav_bg_light">@color/md_theme_surface</color>
 </resources>

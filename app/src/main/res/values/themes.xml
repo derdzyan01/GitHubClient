@@ -1,9 +1,9 @@
 <resources>
-    <style name="Base.Theme.ProjectTask" parent="Theme.Material3.Dark.NoActionBar">
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorOnPrimary">@color/colorOnPrimary</item>
-        <item name="android:colorBackground">@color/colorBackgroundLight</item>
-        <item name="colorOnBackground">@color/colorOnBackgroundLight</item>
+    <style name="Base.Theme.ProjectTask" parent="Theme.Material3.Light.NoActionBar">
+        <item name="colorPrimary">@color/md_theme_primary</item>
+        <item name="colorOnPrimary">@color/md_theme_onPrimary</item>
+        <item name="android:colorBackground">@color/md_theme_background</item>
+        <item name="colorOnBackground">@color/md_theme_onBackground</item>
     </style>
 
     <style name="Theme.ProjectTask.Splash" parent="Theme.SplashScreen">
