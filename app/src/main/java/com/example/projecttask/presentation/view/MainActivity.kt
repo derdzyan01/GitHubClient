@@ -9,19 +9,20 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.NavHostFragment
 import com.example.projecttask.R
 import com.example.projecttask.databinding.ActivityMainBinding
+import com.example.projecttask.feature_main.presentation.navigation.AppNavigator
 import com.example.projecttask.presentation.viewmodel.MainViewModel
 import com.example.projecttask.presentation.viewmodel.NavigationEvent
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), AppNavigator {
+
     private lateinit var binding: ActivityMainBinding
     private val viewModel: MainViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         WindowCompat.setDecorFitsSystemWindows(window, false)
 
         val splash = installSplashScreen()
@@ -33,7 +34,8 @@ class MainActivity : AppCompatActivity() {
 
         lifecycleScope.launch {
             viewModel.navigationEvent.collect { event ->
-                val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+                val navHostFragment =
+                    supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
                 val navController = navHostFragment.navController
                 val navGraph = navController.navInflater.inflate(R.navigation.nav_graph)
 
@@ -43,12 +45,16 @@ class MainActivity : AppCompatActivity() {
                         is NavigationEvent.ToLoginScreen -> com.example.projecttask.feature_auth.R.id.nav_graph_auth
                     }
                 )
-
                 navController.graph = navGraph
                 keepSplashOnScreen = false
             }
         }
-
         viewModel.decideInitialScreen()
+    }
+
+    override fun onLogout() {
+        val navHostFragment =
+            supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+        navHostFragment.navController.navigate(R.id.action_global_to_auth)
     }
 }
