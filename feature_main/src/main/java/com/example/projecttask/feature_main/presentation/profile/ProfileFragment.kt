@@ -1,11 +1,11 @@
 package com.example.projecttask.feature_main.presentation.profile
 
-import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -29,12 +29,10 @@ class ProfileFragment : Fragment() {
     private val viewModel: ProfileViewModel by viewModels()
 
     private val pickImageLauncher =
-        registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
+        registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri: Uri? ->
             uri?.let {
-                requireContext().contentResolver.takePersistableUriPermission(
-                    it,
-                    Intent.FLAG_GRANT_READ_URI_PERMISSION
-                )
+                val flag = android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION
+                requireContext().contentResolver.takePersistableUriPermission(it, flag)
                 viewModel.onAvatarSelected(it)
             }
         }
@@ -59,7 +57,9 @@ class ProfileFragment : Fragment() {
             viewModel.onLogoutClicked()
         }
         binding.profileImageView.setOnClickListener {
-            pickImageLauncher.launch("image/*")
+            pickImageLauncher.launch(
+                PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
+            )
         }
     }
 
@@ -85,9 +85,9 @@ class ProfileFragment : Fragment() {
         }
 
         viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.uiEvent.collectLatest { event ->
-                when (event) {
-                    is ProfileUiEvent.LogoutSuccess -> {
+            viewModel.uiEffect.collectLatest { effect ->
+                when (effect) {
+                    is ProfileUiEffect.LogoutSuccess -> {
                         (requireActivity() as? AppNavigator)?.onLogout()
                     }
                 }

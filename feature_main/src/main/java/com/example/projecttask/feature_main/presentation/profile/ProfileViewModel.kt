@@ -19,15 +19,9 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-
-// event-nery petqa tanem arancin file-eri mej???
-
-internal sealed interface ProfileUiEvent {
-    object LogoutSuccess : ProfileUiEvent
+internal sealed interface ProfileUiEffect {
+    object LogoutSuccess : ProfileUiEffect
 }
-
-
-
 
 internal data class ProfileUiState(
     val user: User? = null,
@@ -45,8 +39,8 @@ internal class ProfileViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(ProfileUiState())
     val uiState = _uiState.asStateFlow()
 
-    private val _uiEvent = MutableSharedFlow<ProfileUiEvent>()
-    val uiEvent = _uiEvent.asSharedFlow()
+    private val _uiEffect = MutableSharedFlow<ProfileUiEffect>()
+    val uiEffect = _uiEffect.asSharedFlow()
 
     private val disposables = CompositeDisposable()
 
@@ -89,7 +83,7 @@ internal class ProfileViewModel @Inject constructor(
     fun onLogoutClicked() {
         viewModelScope.launch {
             logoutUseCase()
-            _uiEvent.emit(ProfileUiEvent.LogoutSuccess)
+            _uiEffect.emit(ProfileUiEffect.LogoutSuccess)
         }
     }
 
