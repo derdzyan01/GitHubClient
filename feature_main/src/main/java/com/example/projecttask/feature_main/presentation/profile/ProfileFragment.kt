@@ -11,6 +11,7 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import coil.load
 import com.example.projecttask.feature_main.R
 import com.example.projecttask.feature_main.databinding.FragmentProfileBinding
@@ -28,14 +29,15 @@ class ProfileFragment : Fragment() {
 
     private val viewModel: ProfileViewModel by viewModels()
 
-    private val pickImageLauncher =
-        registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri: Uri? ->
-            uri?.let {
-                val flag = android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION
-                requireContext().contentResolver.takePersistableUriPermission(it, flag)
-                viewModel.onAvatarSelected(it)
-            }
+    private val pickImageLauncher = registerForActivityResult(
+        ActivityResultContracts.PickVisualMedia()
+    ) { uri: Uri? ->
+        uri?.let {
+            val flag = android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION
+            requireContext().contentResolver.takePersistableUriPermission(it, flag)
+            viewModel.onAvatarSelected(it)
         }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -48,14 +50,29 @@ class ProfileFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        setupToolbar()
         setupClickListeners()
         observeViewModel()
+    }
+
+    private fun setupToolbar() {
+        binding.toolbar.setOnMenuItemClickListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.action_settings -> {
+                    findNavController().navigate(R.id.action_profile_to_settings)
+                    true
+                }
+                else -> false
+            }
+        }
     }
 
     private fun setupClickListeners() {
         binding.logoutButton.setOnClickListener {
             viewModel.onLogoutClicked()
         }
+
         binding.profileImageView.setOnClickListener {
             pickImageLauncher.launch(
                 PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
@@ -67,7 +84,7 @@ class ProfileFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.uiState.collectLatest { state ->
                 binding.progressBar.isVisible = state.isLoading
-                binding.usernameTextView.text = state.user?.login ?: "Loading..."
+                binding.usernameTextView.text = state.user?.login ?: getString(R.string.loading)
 
                 if (!state.avatarUri.isNullOrEmpty()) {
                     binding.profileImageView.load(Uri.parse(state.avatarUri)) {
