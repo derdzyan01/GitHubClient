@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.RadioGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -21,7 +22,15 @@ class SettingsFragment : Fragment() {
     private val binding get() = _binding!!
     private val viewModel: SettingsViewModel by viewModels()
 
-    private var isUpdatingFromViewModel = false
+    private val themeCheckedListener = RadioGroup.OnCheckedChangeListener { _, checkedId ->
+        val themeMode = when (checkedId) {
+            R.id.radioLightTheme -> ThemeMode.LIGHT
+            R.id.radioDarkTheme -> ThemeMode.DARK
+            R.id.radioSystemTheme -> ThemeMode.SYSTEM
+            else -> ThemeMode.SYSTEM
+        }
+        viewModel.setTheme(themeMode)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -45,35 +54,34 @@ class SettingsFragment : Fragment() {
         }
     }
 
+
+
+
     private fun setupThemeSelection() {
-        binding.themeRadioGroup.setOnCheckedChangeListener { _, checkedId ->
-            if (!isUpdatingFromViewModel) {
-                val themeMode = when (checkedId) {
-                    R.id.radioLightTheme -> ThemeMode.LIGHT
-                    R.id.radioDarkTheme -> ThemeMode.DARK
-                    R.id.radioSystemTheme -> ThemeMode.SYSTEM
-                    else -> ThemeMode.SYSTEM
-                }
-                viewModel.setTheme(themeMode)
-            }
-        }
+        binding.themeRadioGroup.setOnCheckedChangeListener(themeCheckedListener)
     }
 
     private fun observeViewModel() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.currentTheme.collectLatest { theme ->
-                val checkedId = when (theme) {
+                val newId = when (theme) {
                     ThemeMode.LIGHT -> R.id.radioLightTheme
                     ThemeMode.DARK -> R.id.radioDarkTheme
                     ThemeMode.SYSTEM -> R.id.radioSystemTheme
                 }
 
-                isUpdatingFromViewModel = true
-                binding.themeRadioGroup.check(checkedId)
-                isUpdatingFromViewModel = false
+
+
+                if (binding.themeRadioGroup.checkedRadioButtonId != newId) {
+                    binding.themeRadioGroup.setOnCheckedChangeListener(null)
+                    binding.themeRadioGroup.check(newId)
+                    binding.themeRadioGroup.setOnCheckedChangeListener(themeCheckedListener)
+                }
             }
         }
     }
+
+
 
     override fun onDestroyView() {
         super.onDestroyView()
