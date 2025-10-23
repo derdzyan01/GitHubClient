@@ -5,4 +5,8 @@
         <item name="itemTextColor">@color/bottom_nav_tint</item>
         <item name="itemBackground">@color/bottom_nav_bg_light</item>
     </style>
+
+    <style name="AppBarStyle" parent="Widget.Material3.AppBarLayout">
+        <item name="android:background">?attr/colorSurface</item>
+    </style>
 </resources>

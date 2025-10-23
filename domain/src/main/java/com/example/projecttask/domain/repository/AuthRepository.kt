@@ -8,4 +8,8 @@ interface AuthRepository {
     fun authenticate(username: String, password: String): Single<User>
     suspend fun setLoggedIn(isLoggedIn: Boolean)
     fun isLoggedIn(): Flow<Boolean>
+    fun getCurrentUser(): Single<User>
+    suspend fun clearCredentials()
+    suspend fun saveAvatarUri(uri: String)
+    fun getAvatarUri(): Flow<String?>
 }

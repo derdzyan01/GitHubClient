@@ -7,6 +7,6 @@
     <color name="md_theme_surface">#1A1C1A</color>
     <color name="md_theme_onSurface">#E2E3E0</color>
     <color name="md_theme_on_surface_variant">#BFC9B9</color>
-
+    <color name="md_theme_surface_container_highest">#2B2F2B</color>
     <color name="bottom_nav_bg_dark">@color/md_theme_surface</color>
 </resources>

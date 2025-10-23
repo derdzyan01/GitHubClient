@@ -17,6 +17,16 @@
     <fragment
         android:id="@+id/profileFragment"
         android:name="com.example.projecttask.feature_main.presentation.profile.ProfileFragment"
-        android:label="Profile" />
+        android:label="Profile">
+
+        <action
+            android:id="@+id/action_profile_to_settings"
+            app:destination="@id/settingsFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.example.projecttask.feature_main.presentation.settings.SettingsFragment"
+        android:label="Settings" />
 
 </navigation>

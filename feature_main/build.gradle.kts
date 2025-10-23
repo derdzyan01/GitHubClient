@@ -30,6 +30,8 @@ android {
 
 dependencies {
     implementation(projects.domain)
+    implementation(projects.data)
+
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
@@ -48,4 +50,5 @@ dependencies {
 
     implementation(libs.coil)
 
+    implementation(libs.androidx.coordinatorlayout)
 }

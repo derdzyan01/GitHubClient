@@ -11,4 +11,10 @@
         android:name="com.example.projecttask.feature_main.presentation.main.MainFragment"
         android:label="Main" />
 
+    <action
+        android:id="@+id/action_global_to_auth"
+        app:destination="@id/nav_graph_auth"
+        app:popUpTo="@id/nav_graph"
+        app:popUpToInclusive="true" />
+
 </navigation>
