@@ -1,6 +1,7 @@
 package com.example.projecttask.presentation.view
 
 import android.os.Bundle
+import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
@@ -27,6 +28,7 @@ class MainActivity : AppCompatActivity(), AppNavigator {
     lateinit var themeManager: ThemeManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        enableEdgeToEdge()
         super.onCreate(savedInstanceState)
 
         lifecycleScope.launch {
