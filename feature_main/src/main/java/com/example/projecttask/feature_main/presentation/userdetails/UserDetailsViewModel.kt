@@ -18,6 +18,11 @@ class UserDetailsViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
+    companion object {
+        private const val KEY_USERNAME = "username"
+        private const val KEY_AVATAR_URL = "avatarUrl"
+    }
+
     private val _repositories = MutableLiveData<List<Repo>>(emptyList())
     val repositories: LiveData<List<Repo>> = _repositories
 
@@ -29,10 +34,8 @@ class UserDetailsViewModel @Inject constructor(
 
     private val compositeDisposable = CompositeDisposable()
 
-    val username: String? = savedStateHandle.get<String>("username")
-    val avatarUrl: String? = savedStateHandle.get<String>("avatarUrl")
-
-
+    val username: String? = savedStateHandle.get<String>(KEY_USERNAME)
+    val avatarUrl: String? = savedStateHandle.get<String>(KEY_AVATAR_URL)
 
     init {
         username?.let { loadUserRepositories(it) }
@@ -55,8 +58,6 @@ class UserDetailsViewModel @Inject constructor(
             )
         compositeDisposable.add(disposable)
     }
-
-
 
     override fun onCleared() {
         super.onCleared()
