@@ -28,7 +28,11 @@ class UsersFragment : Fragment() {
     private val viewModel: UsersViewModel by viewModels()
     private val userAdapter: UserAdapter by lazy {
         UserAdapter { user ->
-            // navigation to the details page
+            val action = UsersFragmentDirections.actionUsersToUserDetails(
+                username = user.login,
+                avatarUrl = user.avatarUrl
+            )
+            findNavController().navigate(action)
         }
     }
 

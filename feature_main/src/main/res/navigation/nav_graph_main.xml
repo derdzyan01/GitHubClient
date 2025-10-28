@@ -12,7 +12,15 @@
     <fragment
         android:id="@+id/usersFragment"
         android:name="com.example.projecttask.feature_main.presentation.users.UsersFragment"
-        android:label="Users" />
+        android:label="Users">
+
+        <action
+            android:id="@+id/action_users_to_userDetails"
+            app:destination="@id/userDetailsFragment" />
+
+    </fragment>
+
+
 
     <fragment
         android:id="@+id/profileFragment"
@@ -22,11 +30,27 @@
         <action
             android:id="@+id/action_profile_to_settings"
             app:destination="@id/settingsFragment" />
+
     </fragment>
 
     <fragment
         android:id="@+id/settingsFragment"
         android:name="com.example.projecttask.feature_main.presentation.settings.SettingsFragment"
         android:label="Settings" />
+
+    <fragment
+        android:id="@+id/userDetailsFragment"
+        android:name="com.example.projecttask.feature_main.presentation.userdetails.UserDetailsFragment"
+        android:label="Details">
+
+        <argument
+            android:name="username"
+            app:argType="string" />
+
+        <argument
+            android:name="avatarUrl"
+            app:argType="string" />
+
+    </fragment>
 
 </navigation>
