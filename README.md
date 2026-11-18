@@ -8,13 +8,11 @@ Built as a multi-module app following Clean Architecture, with each feature deve
 
 | Login | My repositories | Users |
 | :---: | :---: | :---: |
-| <img width="1080" height="2400" alt="login" src="https://github.com/user-attachments/assets/16b11493-ea31-4d0d-8781-12e18adcca23" /> |<img width="1080" height="2400" alt="home" src="https://github.com/user-attachments/assets/7719b066-e850-4b47-9bf3-f652dbf3d4b2" /> | <img width="1080" height="2400" alt="users" src="https://github.com/user-attachments/assets/8614875e-49e0-4de6-899a-f96e3fd1f0ec" /> |
+| <img width="240" alt="login" src="https://github.com/user-attachments/assets/16b11493-ea31-4d0d-8781-12e18adcca23" /> | <img width="240" alt="home" src="https://github.com/user-attachments/assets/7719b066-e850-4b47-9bf3-f652dbf3d4b2" /> | <img width="240" alt="users" src="https://github.com/user-attachments/assets/8614875e-49e0-4de6-899a-f96e3fd1f0ec" /> |
 
 | User details | Profile | Settings |
 | :---: | :---: | :---: |
-| <img width="1080" height="2400" alt="user_details" src="https://github.com/user-attachments/assets/00daf071-4b28-4b1f-8651-ff5032b6ed0f" /> | <img width="1080" height="2400" alt="profile" src="https://github.com/user-attachments/assets/717b2da2-5f0e-4793-803c-784c55bdb473" /> | <img width="1080" height="2400" alt="theme" src="https://github.com/user-attachments/assets/56079c7c-ed7b-495a-ae57-99ab33268260" /> |
-
-
+| <img width="240" alt="user_details" src="https://github.com/user-attachments/assets/00daf071-4b28-4b1f-8651-ff5032b6ed0f" /> | <img width="240" alt="profile" src="https://github.com/user-attachments/assets/717b2da2-5f0e-4793-803c-784c55bdb473" /> | <img width="240" alt="theme" src="https://github.com/user-attachments/assets/56079c7c-ed7b-495a-ae57-99ab33268260" /> |
 
 ## Features
 
@@ -31,14 +29,14 @@ Built as a multi-module app following Clean Architecture, with each feature deve
 app             → entry point, navigation host, Hilt setup
 feature_auth    → login screen (presentation)
 feature_main    → home, users, user details, profile, settings (presentation)
-domain          → models, repository interfaces, use cases (pure Kotlin)
+domain          → models, repository interfaces, use cases (no Android framework code)
 data            → Retrofit API, Room database, DataStore, repository implementations, DI modules
 ```
 
 - **Presentation**: MVVM. Fragments observe ViewModels; UI state is exposed with StateFlow / LiveData.
 - **Domain**: one use case per action (e.g. `LoginUseCase`, `GetReposUseCase`, `GetUserReposUseCase`).
 - **Data**: repositories combine the GitHub REST API with a Room cache; DTOs and entities are mapped to domain models.
-- Feature modules depend only on `domain`, never on each other.
+- `domain` sits at the centre: `data` and the feature modules depend on it, and `app` wires everything together with Hilt.
 
 ## Tech stack
 
@@ -65,3 +63,4 @@ data            → Retrofit API, Room database, DataStore, repository implement
 - Unify async code on Coroutines/Flow instead of mixing with RxJava.
 - Store credentials encrypted (OAuth flow or an encrypted token store).
 - Add unit tests for use cases and ViewModels, plus a GitHub Actions build.
+- Remove the remaining cross-module shortcuts (`feature_auth` → `feature_main`, `feature_main` → `data`) so features depend only on `domain`.
