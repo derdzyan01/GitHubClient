@@ -1,3 +1,5 @@
+enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
+
 pluginManagement {
     repositories {
         google {
@@ -19,5 +21,9 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "Project Task"
+rootProject.name = "projectTask"
 include(":app")
+include(":data")
+include(":domain")
+include(":feature_auth")
+include(":feature_main")

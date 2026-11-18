@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph_main"
+    app:startDestination="@id/homeFragment">
+
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.example.projecttask.feature_main.presentation.home.HomeFragment"
+        android:label="Home" />
+
+    <fragment
+        android:id="@+id/usersFragment"
+        android:name="com.example.projecttask.feature_main.presentation.users.UsersFragment"
+        android:label="Users">
+
+        <action
+            android:id="@+id/action_users_to_userDetails"
+            app:destination="@id/userDetailsFragment" />
+
+    </fragment>
+
+
+
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.example.projecttask.feature_main.presentation.profile.ProfileFragment"
+        android:label="Profile">
+
+        <action
+            android:id="@+id/action_profile_to_settings"
+            app:destination="@id/settingsFragment" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.example.projecttask.feature_main.presentation.settings.SettingsFragment"
+        android:label="Settings" />
+
+    <fragment
+        android:id="@+id/userDetailsFragment"
+        android:name="com.example.projecttask.feature_main.presentation.userdetails.UserDetailsFragment"
+        android:label="Details">
+
+        <argument
+            android:name="username"
+            app:argType="string" />
+
+        <argument
+            android:name="avatarUrl"
+            app:argType="string" />
+
+    </fragment>
+
+</navigation>

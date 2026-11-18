@@ -1,5 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="colorPrimary">@color/md_theme_primary</color>
+    <color name="colorOnPrimary">@color/md_theme_onPrimary</color>
+    <color name="colorBackgroundLight">@color/md_theme_background</color>
+    <color name="colorOnBackgroundLight">@color/md_theme_onBackground</color>
+
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <color name="colorBackgroundDark">@color/md_theme_background</color>
+    <color name="colorOnBackgroundDark">@color/md_theme_onBackground</color>
+
+    <color name="bottom_nav_bg">#FFFFFF</color>
 </resources>

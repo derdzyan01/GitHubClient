@@ -1,0 +1,55 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+
+plugins {
+    alias(libs.plugins.android.library)
+    alias(libs.plugins.kotlin.android)
+    id("com.google.devtools.ksp")
+    id("com.google.dagger.hilt.android")
+    id("androidx.navigation.safeargs.kotlin")
+}
+
+android {
+    namespace = "com.example.projecttask.feature_main"
+    compileSdk = 36
+
+    defaultConfig {
+        minSdk = 24
+    }
+    buildFeatures {
+        viewBinding = true
+    }
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
+    }
+    kotlin {
+        compilerOptions {
+            jvmTarget.set(JvmTarget.JVM_11)
+        }
+    }
+}
+
+dependencies {
+    implementation(projects.domain)
+    implementation(projects.data)
+
+
+    implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.appcompat)
+    implementation(libs.material)
+    implementation(libs.androidx.constraintlayout)
+    implementation(libs.androidx.navigation.fragment)
+    implementation(libs.androidx.navigation.ui.ktx)
+
+    implementation(libs.hilt.android)
+    implementation(libs.androidx.swiperefreshlayout)
+    ksp(libs.hilt.android.compiler)
+
+    implementation(libs.rxandroid)
+
+    implementation(libs.androidx.fragment.ktx)
+
+    implementation(libs.coil)
+
+    implementation(libs.androidx.coordinatorlayout)
+}

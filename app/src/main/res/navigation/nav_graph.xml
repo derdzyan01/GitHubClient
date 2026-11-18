@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/nav_graph_auth">
+
+    <include app:graph="@navigation/nav_graph_auth" />
+
+    <fragment
+        android:id="@+id/mainFragment"
+        android:name="com.example.projecttask.feature_main.presentation.main.MainFragment"
+        android:label="Main" />
+
+    <action
+        android:id="@+id/action_global_to_auth"
+        app:destination="@id/nav_graph_auth"
+        app:popUpTo="@id/nav_graph"
+        app:popUpToInclusive="true" />
+
+</navigation>
